@@ -33,6 +33,13 @@ class Clock extends Component<ClockProps, ClockState> {
     }, 1000);
   }
 
+  componentDidUpdate(prevProps: ClockProps): void {
+    if (prevProps.name !== this.props.name) {
+      // eslint-disable-next-line no-console
+      console.warn(`Renamed from ${prevProps.name} to ${this.props.name}`);
+    }
+  }
+
   componentWillUnmount(): void {
     window.clearInterval(this.timerId);
   }
@@ -44,7 +51,9 @@ class Clock extends Component<ClockProps, ClockState> {
     return (
       <div className="Clock">
         <strong className="Clock__name">{name}</strong>
+
         {' time is '}
+
         <span className="Clock__time">
           {today.toUTCString().slice(-12, -4)}
         </span>
@@ -82,15 +91,6 @@ export class App extends Component<{}, AppState> {
     document.removeEventListener('click', this.handleLeftClick);
 
     window.clearInterval(this.timerId);
-  }
-
-  componentDidUpdate(prevProps: {}, prevState: AppState): void {
-    const { clockName, hasClock } = this.state;
-
-    if (prevState.clockName !== clockName && prevState.hasClock && hasClock) {
-      // eslint-disable-next-line no-console
-      console.warn(`Renamed from ${prevState.clockName} to ${clockName}`);
-    }
   }
 
   handleRightClick = (event: MouseEvent): void => {
